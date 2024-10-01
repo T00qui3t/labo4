@@ -1,0 +1,25 @@
+body {
+    background-image: url(images/electric.jpg);
+    background-size: cover;
+    color: white;
+    font-family: Arial, sans-serif; /* Police de caractère sans-serif */
+    padding-left: 20px; /* Optionnel : décalage à gauche */
+}
+
+h1 {
+    font-size: 30px;
+}
+
+.realisateur {
+    color: rgb(156, 19, 19);
+    font-size: 25px;
+}
+
+ol {
+    list-style-type: upper-latin;
+    color: hsl(0, 0%, 100%);
+}
+
+ul {
+    list-style-type: disc;
+}

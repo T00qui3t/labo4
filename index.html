@@ -1,89 +1,76 @@
 <!DOCTYPE html>
-<html lang="fr">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>Le septième art: Quelques réalisateurs</title>
+    <link rel="stylesheet" href="style.css">
+    <title>Love Puzzle 💖</title>
+    
 </head>
-
 <body>
-    <h1>Le septième art: Quelques réalisateurs</h1>
-    <ul style="list-style: none;">
-        <li class="realisateur">Quentin Tarantino
-            <ol>
-                <li>Kill Bill: Vol.1
-                    <ul>
-                        <li>Uma Thurman</li>
-                        <li>Lucy Liu</li>
-                        <li>David Carradine</li>
-                    </ul>
-                </li>
-                <li>Django Unchained
-                    <ul>
-                        <li>Jamie foxx</li>
-                        <li>Leonardo DiCaprio</li>
-                        <li>Kerry Washington</li>
-                    </ul>
-                </li>
-            </ol>
-        </li>
-        <li class="realisateur">Denis Villeneuve
-            <ol>
-                <li>Dune:Part 1
-                    <ul>
-                        <li>Zendaya</li>
-                        <li>Timothée Chalamet</li>
-                        <li>Rebecca Ferguson</li>
-                    </ul>
-                </li>
-                <li>Sicario
-                    <ul>
-                        <li>Emily Blunt</li>
-                        <li>Josh Brolin</li>
-                        <li>Benicio del Toro</li>
-                    </ul>
-                </li>
-            </ol>
-        </li>
-        <li class="realisateur">Hayao Miyazaki
-            <ol>
-                <li>Spirited away
-                    <ul>
-                        <li>Rumi Hiirayi</li>
-                        <li>Miyu Irino</li>
-                        <li>Mari Natsuki</li>
-                    </ul>
-                </li>
-                <li>Howl's moving castle
-                    <ul>
-                        <li>Takuya Kimura</li>
-                        <li>Chieko Baisho</li>
-                        <li>Tatsuka Gashuin</li>
-                    </ul>
-                </li>
-            </ol>
-        </li>
-        <li class="realisateur">Jordan Peele
-            <ol>
-                <li>Get out
-                    <ul>
-                        <li>Daniel Kaluuya</li>
-                        <li>Lakeith Stanfield</li>
-                        <li>Alison Williams</li>
-                    </ul>
-                </li>
-                <li>Us
-                    <ul>
-                        <li>Lupita Nyong'o</li>
-                        <li>Evan Alex </li>
-                        <li>Winston Duke</li>
-                    </ul>
-                </li>
-            </ol>
-        </li>
-    </ul>
+    <h1>💖 Put Together Our Picture 💖</h1>
+    <p>Drag and arrange the pieces to complete the picture!</p>
+    <div class="puzzle-container" id="puzzleContainer"></div>
+    <div class="hidden-message" id="hiddenMessage">Congrats! I love you Dave💕</div>
+    
+    <script>
+        const puzzleContainer = document.getElementById("puzzleContainer");
+        const hiddenMessage = document.getElementById("hiddenMessage");
+        let positions = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+        let shuffled = positions.sort(() => Math.random() - 0.5);
+        let correctOrder = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+        
+        shuffled.forEach((pos, index) => {
+            let piece = document.createElement("div");
+            piece.classList.add("puzzle-piece");
+            piece.style.backgroundImage = "url('images/love-picture.jpg')";
+            piece.style.backgroundPosition = `${-(pos % 3) * 100}px ${-Math.floor(pos / 3) * 100}px`;
+            piece.setAttribute("data-index", pos);
+            piece.draggable = true;
+            
+            piece.addEventListener("dragstart", dragStart);
+            piece.addEventListener("dragover", dragOver);
+            piece.addEventListener("drop", drop);
+            
+            puzzleContainer.appendChild(piece);
+        });
+        
+        function dragStart(event) {
+            event.dataTransfer.setData("text", event.target.dataset.index);
+        }
+        
+        function dragOver(event) {
+            event.preventDefault();
+        }
+        
+        function drop(event) {
+            event.preventDefault();
+            let draggedIndex = event.dataTransfer.getData("text");
+            let targetIndex = event.target.dataset.index;
+            
+            let draggedElement = document.querySelector(`[data-index='${draggedIndex}']`);
+            let targetElement = document.querySelector(`[data-index='${targetIndex}']`);
+            
+            let tempPos = draggedElement.style.backgroundPosition;
+            draggedElement.style.backgroundPosition = targetElement.style.backgroundPosition;
+            targetElement.style.backgroundPosition = tempPos;
+            
+            let tempIndex = draggedElement.dataset.index;
+            draggedElement.dataset.index = targetElement.dataset.index;
+            targetElement.dataset.index = tempIndex;
+            
+            checkCompletion();
+        }
+        
+        function checkCompletion() {
+            let pieces = document.querySelectorAll(".puzzle-piece");
+            let isComplete = Array.from(pieces).every((piece, i) => parseInt(piece.dataset.index) === correctOrder[i]);
+            
+            if (isComplete) {
+                hiddenMessage.style.display = "block";
+                hiddenMessage.classList.add("win-animation");
+            }
+        }
+    </script>
 </body>
-
 </html>
